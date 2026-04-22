@@ -9,7 +9,8 @@ Es berücksichtigt ferner die Nutzbarkeit von Solarthermie.
 
 <img width="582" height="780" alt="image" src="https://github.com/user-attachments/assets/dd1bec68-48f9-4458-85aa-330077538c63" /> <br>
 <br>
-Das Entscheidungs-Dashboard ergänzt mein Alternatives Dashboard (vgl. https://github.com/hrsnsvh2pd-png/Alternatives-Dashboard  ) <br>
+Das Entscheidungs-Dashboard ergänzt mein Alternatives Dashboard. <br> 
+(vgl. https://github.com/hrsnsvh2pd-png/Alternatives-Dashboard  ) <br>
 <br>
 
 ## 1. Vorbemerkung
@@ -17,7 +18,7 @@ Das Entscheidungs-Dashboard ergänzt mein Alternatives Dashboard (vgl. https://g
 
 Dieser Satz bringt Dilemma und Grenzen der betriebswirtschaftlichen Forschung gleichermaßen auf den Punkt. Denn nur die Zukunft lässt sich gestalten. Dies gilt allerdings auch für sicherlich sehr viele der existierenden Dashboards zur Wärmepumpenanalyse und -steuerung, die regelmäßig alle gleichermaßen daran kranken, dass sie bestenfalls die aktuellen Zustände darstellen. Um eine Wärmepumpe jedoch optimal zu steuern, bedarf es allerdings einer vorausschauenden Berücksichtigung von Live-Wetterdaten, da Umgebungstemperatur und Sonnenstrahlung technisch bedingt die maßgeblichen Parameter für die technische und ökonomische Effizienz aller Wärmepumpen sind. Anbieter wie NIBE oder Stiebel-Eltron haben dies nach eigenen Aussagen bereits erkannt und lassen diesbezügliche Prognosewerte angabegemäß in ihre Wärmepumpensteuerung einfließen. Die Viessmanns-VICare-App berücksichtigt derzeit noch m.W. keine Wetterprognose-Daten.<br>
 <br>
-Diese Lücke zu schließen, war meine Motivation für die Entwicklung des Entscheidungs-Dashboards. Es stellt bewusst eine robuste, minimalistische Optimierungsregel dar, mit der ca. 80 - 90% des möglichen Effizienzpotenzials eralsiert werden können - die Handlunhsenpfehlungen lasssen sich alle problemlos in der Praxis mit Hilfe der VICare-App oder am Anlagen-Display umsetzen. Das Dashboard  <br>
+Diese Lücke zu schließen, war meine Motivation für die Entwicklung des Entscheidungs-Dashboards. Es stellt bewusst eine robuste, minimalistische Optimierungsregel dar, mit der ca. 80 - 90% des möglichen Effizienzpotenzials realsiert werden können - die Handlunhsenpfehlungen lasssen sich alle problemlos in der Praxis mit Hilfe der VICare-App oder am Anlagen-Display umsetzen. Das Dashboard  <br>
 <br>
 - basiert auf stündlich abgerufene Wetterdaten von Meteo-Open (https://open-meteo.com/);
 - umfasst einen Prognosezeitraum von 48 Stunden;
@@ -63,4 +64,10 @@ Dieses Dashboard ist ein eigenständiges Community-Projekt und steht in keiner o
 
 Die vollständigen Lizenz- und rechtlichen Rahmenbedingungen, unter denen die in diesem Repository enthaltene Grafana-Dashboard-JSON-Dateien veröffentlich wird, stehen in den Dateien LEGAL.md und LICENSE.md in diesem Repository.<br>
 <br>
-## 3. Konzeptioneller Ansatz
+## 3. Überblick
+Nachstehend ein Überblick über die Inhalte des Entscheidungs-Dashboards <br>
+<br>
+<img width="1022" height="802" alt="image" src="https://github.com/user-attachments/assets/1b02b11e-8171-440b-9d67-db49d8ec79b9" />
+<br>
+
+## 4. Konzeptioneller Ansatz
