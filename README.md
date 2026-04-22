@@ -61,6 +61,6 @@ Die Lizenzbedingungen können hier abgerufen werden: https://creativecommons.org
 Dieses Dashboard ist ein eigenständiges Community-Projekt und steht in keiner offiziellen Verbindung zu vieventlog oder dessen Autor.br>
 <br>
 
-Die vollständigen Lizenz- und rechtlichen Rahmenbedingungen, unter denen der in diesem Repository enthaltene Grafana-Dashboard-JSON veröffentlich wird, stehen inder Datei LEGAL.md in diesem Repository.<br>
+Die vollständigen Lizenz- und rechtlichen Rahmenbedingungen, unter denen die in diesem Repository enthaltene Grafana-Dashboard-JSON-Dateien veröffentlich wird, stehen inder Datei LEGAL.md in diesem Repository.<br>
 <br>
 ## 3. Konzeptioneller Ansatz
