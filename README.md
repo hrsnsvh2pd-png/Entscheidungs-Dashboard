@@ -35,7 +35,7 @@ Die verarbeiteten Daten stehen in einer separaten SQLite-Datenbank (entscheidung
 <br>
 
 ## 2. Rechtliche Hinweise
-Dieses Repository enthält ein Grafana-Dashboard als Classic-JSON-Datei. Das Dashboard kann direkt in eine eigene Grafana-Instanz importiert werden.
+Dieses Repository enthält ein Grafana-Dashboard als Classic-JSON-Datei sowie eine SQLite-Datenbank. Das Dashboard kann direkt in eine eigene Grafana-Instanz importiert werden. Die SQLite-Datenbank kann direkt auf die Festplatte kopiert werden.
 
 Das Dashboard basiert auf Grafana OSS, einem Produkt von Grafana Labs, lizenziert unter der GNU Affero General Public License v3.0 (AGPLv3).
 
@@ -47,6 +47,8 @@ Dieses Dashboard nutzt Grafana unverändert, sodass eine private Nutzung ohne Of
 
 Das für die Anbindung der viessmann_events-Datenbank erforderliche SQLite-Plugin ist Bestandteil der Grafana-Standard-Distribution und verursacht keine zusätzlichen Lizenzanforderungen.
 
+SQLite ist eine Public Domain. Die Lizenzbedingungen sind einsehbar unter: https://sqlite.org/copyright.html
+
 vieventlog Das Dashboard greift auf die Datei viessmann_events.db zu, die durch die Software vieventlog erzeugt und fortgeschrieben wird.
 
 vieventlog ist ein Open-Source-Projekt von Matthias Schneider. Ein besonderer Dank gilt ihm für die Entwicklung und Bereitstellung dieses Projekts für die Community.
@@ -55,7 +57,7 @@ Der vollständige Quellcode ist verfügbar unter: https://github.com/mschneider8
 
 vieventlog ist unter der MIT-Lizenz lizenziert. Lizenzbedingungen: https://mit-license.org
 
-Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien stehen unter der Creative Commons Attribution 4.0 International (CC BY 4.0).
+Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien und Datenbank-Dateien stehen unter der Creative Commons Attribution 4.0 International (CC BY 4.0).
 
 Die Lizenzbedingungen können hier abgerufen werden: https://creativecommons.org/licenses/by/4.0/legalcode
 
