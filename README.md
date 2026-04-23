@@ -71,3 +71,48 @@ Nachstehend ein Überblick über die Inhalte des Entscheidungs-Dashboards <br>
 <br>
 
 ## 4. Konzeptioneller Ansatz
+Eine Wärmepumpe ist eine im Vergleich zu fossilen Brenwertgeräten vergleichsweise träge Heizquelle. Ihre (technische und ökonomische) Effizienz im Einsatz wird maßgeblich durch Umgebungstemperatur und angeforderte Wärmeleistung beeinflusst. Der Verschleiß (und damit die Lebensdauer) einer Wärmepumpe werden wiederum maßgeblich durch Laufzeit sowie Anzahl und zeitliche Abfolge der Kompressorstarts beeinflusst. Die Effizienz wird zusätzlich beeinflusst durch die Nutzung von Photovoltaik (Strompreis) sowie von Solarthermie (Stromverbrauch, Laufzeit, Kompressorstarts). <br>
+<br>
+Konzeptionell verfolgt das Dashboard einen physikalisch-herarchischen Ansatz: <br>
+1. Entscheidungs-*Vorschlag* auf Basis eines festen Algorithmus <br>
+   - Gebäudephysik (Trägheit bei Aufheizung) --> Temperaturtrend <br>
+   - Nutzbarkeit von Photovoltaik --> nächstes PV-Fenster mit (einmaligem) Mindest-PV-Peak <br>
+
+2. tatsächliche *Entscheidung* durch den Nutzer auf Basis ergänzender Informationen (Machbarkeit, bestehender Spielraum <br>
+   - Komfortzeit (max. akzeptable Zeit für Abkühlung ohne Heizung)
+   - Anlagenzustand (Vermeidung unnützer bzw. zusätzlicher Kompressourstarts, Berücksichtigung der Anlagen-Laufzeit <br>
+   - Komfort (Warmwasser-Temperatur) <br>
+3. Solarthermie <br>
+Solarthermie verläuft weitestgehend komplementär zur PV-Leistung. Individuell ist sie ohne Sensoren nur sehr schwer zu prognostizieren, da ihre Wirkung u.a. neben der solareren Einstrahlung abhängig ist von Kollektortyp, Kollektortemperatur, Anlagen-Gesamtwirkungsgrad, Dachausrichtung, Dachneigung, Rohr-/Speicherverluste, Startverluste). Zudem ist ihr Einfluss vom Systemzustand (tatsächliche Pufferspeicher-Temperatur) abhängig, der faktisch nicht prognostizierbar ist. <br>
+<br>
+Konzeptionell erfolgt die Berücksichtigung Solarthermie-Nutzbarkeit deshalb als Hinweis in Form eines "Overrulings" des ansonsten aktiven Aktions-Vorschlags bei geeigneten Rahmenbdingungen (Pufferspeicher-Temperaturgrenzen, Stärke der Einstrahlung). <br>
+<br>
+Da die meisten Wärmepumpen in Verbindung mit Photovoltaik-Anlagen beschrieben werden, wird dieser Aktionsvorschlag in jedem Fall berücksichtigt. Der HInweis auf Solarthermie kann durch einfachen Eintrag in der Datenbank-Steuertabelle unterdrückt werden. (meta_config: Wert für min_solar_buffer_threshold auf 99 setzen). Das Panel für Pufferspeicher-Temperatur, word bei fehlenden Werten nicht angezeigt.<br>
+<br>
+<br>
+Die ausführliche Beschreibung des konzeptionellen Ansatzes sowie die Beschrebung der AKtionsvorschlags-Ermittlung kann dem beiigenden Dokument "Enscheidungs-Dashoard.pdf" entnommen werden.<br>
+<br>
+
+## 5. Datenbank-Struktur
+Das Dashboard verfügt über eine eigende SQLite-Datenbank mit mehreren Tabellen und Views, die als fertige Datenbank mit ausgeliefert wird (vgl. anhängende Datei...).Die Datenbank ist leer, lediglich die Steuertabelle (meta_config) enthält Einträge, damit die Datenbank unverzüglich genuzt werden kann. <br>
+<br
+Struktur und SQL-Statements zu ihrer Erzeugung (falls gewünscht oder notwendig) können dem beiligenden Dokument Entscheidung-Dashboard-pdf entnommenwerden. <br>
+<br>
+
+## 6. Befüllen der Datenbank
+Das Dashboard basiert auf 2 Datenquellen, die stündlich (oder je nach Bedarf auch häufiger/seltener) befüllt werden:<br>
+- 48-Stunden-Wettervorhersage von Open Meteo (https://open-meteo.com/) zur ABleitung des Aktionsvorschlags <br>
+  Diese Wettervorhersage ist m.W. kostenlos (Begrenzung der kostenlosten API-Calls ist bei stündlichem Update unkritisch). Einzutragen sind im Download-Skript lediglich die Geodaten der zum Wärmepumpenstandort nächstgelegenen Wetterstation (zu finden unter https://open-meteo.com/en/docs?bounding_box=-90,-180,90,180)<br<
+  Das Skript (Code), die genaue Bechreibung der Eintragung sowie die Einstellung des automatisch stündlich Skriptablaufs (CRON-Job) sind in der beiligenden Datei Entscheidungs-Dashboard ebshcrieben. <rb>
+- Betriebsdaten der Wärmepumpe (für die ergänzenden Informationen ur tatsächlichen Entscheidungsfindung) <br>
+  Hier greift das Dashboard auf die vonder Anwendung vieventlog erzeugten und regelmäßig fortgeschriebenen SQLite-Datenbank viessmann_events.db zurück. **Dies bedeutet, dass die vieventlog-Anwendung notwendig installiert werden und 7 x 24 laufen muss, damit die aktuellen Betriebsdaten zr Verfügung stehen.** <br>
+Dies klingt auf den ersten Blick viellecht abschreckend, aber ohne kontinierliche Daten-Aktualisierung macht ein Dashboard eigentlich grundsätzlich keinen Sinn.<br>
+<br>
+Die Daten können alternativ auch ohne vieventlog per API-Call aus der Viessmann-Cloud heruntergeladen werden (aus der viessmann_event.db wird lediglich die Tabelle temperature_snapshot sowie die view temperature_snapshot_stat benötigt. Dieser Weg wird hier aber bewusst nicht empfohlen, da das Entscheidungs-Dashboard eigentlich nur optimal in Zusammenhang mit einem Dashboard für die Wärmepumpe betrieben werden kann: <br>
+- mein Alternatives Dashboard (https://github.com/hrsnsvh2pd-png/Alternatives-Dashboard)
+  oder
+- das in vieventlog enthaltene Dashboard (https://github.com/mschneider82/vieventlog) <br>
+<br>
+
+## 7. Installation
+
