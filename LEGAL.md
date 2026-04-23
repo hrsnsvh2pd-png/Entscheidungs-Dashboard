@@ -24,7 +24,7 @@ Dieses Dashboard ist ein eigenständiges Community-Projekt und steht in keiner o
 
 4. Lizenz der in diesem Repository enthaltenen Grafana-Dashboard-JSON-, Datenbank- und Skript-Dateien
 
-Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-, Datenbank- und Skript-Dateien stehen unter:
+Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-, Datenbank- und Skript-Dateien (zusammen: Repository-Dateien) stehen unter:
 
 Creative Commons Attribution 4.0 International (CC BY 4.0)
 
@@ -38,7 +38,7 @@ Lizenztext: https://creativecommons.org/licenses/by/4.0/legalcode
 
 5. Haftungsausschluss
 
-Die Dashboard-und Datenbank-Dateien werden „wie besehen“ bereitgestellt.
+Die Repository-Dateien werden „wie besehen“ bereitgestellt.
 
 Es wird keine Gewährleistung für Funktion, Eignung für einen bestimmten Zweck oder Fehlerfreiheit übernommen.
 
