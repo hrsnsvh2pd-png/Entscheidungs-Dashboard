@@ -117,4 +117,32 @@ Die Daten können alternativ auch ohne vieventlog per API-Call aus der Viessmann
 <br>
 
 ## 7. Installation
+Die Installation des Entscheidungs-Dashboards läuft wie folgt ab: <br>
+1. Auslieferung
+   Die Auslieferung umfasst
+   - Dashboard-JSON zum Upload in Grafana
+   - Leere SQLite-Datenbankdatei entscheidungs_dashboard.db (Ausnahme Tabelle meta_config)
+   - Skript-Dateien für den Import der Wetterdaten und Systemparameter
+   - Dokumentation und ausführliche Hinweise: Entscheidungs-Dashboard.pdf <br>
+2. Dateien auf den Rechner kopieren
+3. Grafana installieren
+   vgl. dazu die ausführliche Anleitung im Dokument Entscheidungs-Dashboard.pdf <br>
+5. Dashboard JSON in GRAFANA importieren
+   vgl. dazu die ausführliche Anleitung im Dokument Entscheidungs-Dashboard.pdf <br>
+   Bitte beachten: <br>
+   - Bei der Anlage der "neu Datasource" ist der Pfad zur eintscheidungs_dashboard.db einzutragen
+   - Variable ""Anlage": Diese Variable **muss** aktualisiert werden, das sonst keine Betriebsdateb angezeigt werden.     Hier ist im Feld "Query" folgendes SQL-Statement einzutragen: <br>
+   select  installation_id from temperature_snapshots group by  installation_id <br>
+   - Link "Dashboard": Falls ein zusätzliches Dashboard genutzt wird. ist hier der http-Link zum Dashboard einzutragen <br>
+6. Die Skript-Dateien anpassen und CRON-Jobs einrcihten
+   Vgl. dazu die ausführliche Anleitung in der Datei Entscheidungs-Dashboard.pdf <br>
+7. Skripte testen <br>
+8. Dashboard starten und Zeitfilter einrichten
+   Hinweis: Der Zeitfilter **muss** unbedingt eingestellt werden auf
+   - From: now
+   - To: now+48h (ohne Leerzeichen dazwischen) <br>
+   Sonst wird der Prognosezeitraum im Dashboaerd nicht ordentlich angezeigt.
+<br>
 
+## Haftungsausschluss
+   
