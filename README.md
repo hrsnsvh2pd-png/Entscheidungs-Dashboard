@@ -144,5 +144,159 @@ Die Installation des Entscheidungs-Dashboards läuft wie folgt ab: <br>
    Sonst wird der Prognosezeitraum im Dashboaerd nicht ordentlich angezeigt.
 <br>
 
-## Haftungsausschluss
+## Lizenz- und Haftungsbestimmungen
+Deutschsprachige Version: <br>
+<br>
+
+7.1 Nutzung von Grafana
+
+Dieses Dashboard wurde für die Nutzung mit Grafana OSS entwickelt, einem Produkt der Grafana Labs.
+
+Grafana OSS ist lizenziert unter der
+GNU Affero General Public License v3.0 (AGPLv3).
+
+Der Quellcode ist öffentlich verfügbar unter:
+https://github.com/grafana/grafana
+
+Die Lizenzbedingungen sind abrufbar unter:
+https://www.gnu.org/licenses/agpl-3.0.txt
+
+Dieses Repository enthält keine modifizierte Version von Grafana.
+Jeder Nutzer ist verpflichtet, eine eigene Grafana-Installation bereitzustellen.
+
+Eine Verpflichtung zur Offenlegung eigener Anpassungen entsteht nur im Rahmen der AGPL-Bestimmungen und betrifft ausschließlich Modifikationen an der AGPL-lizenzierten Software selbst.
+
+7.2 Abhängigkeit von vieventlog
+
+Zur Nuzung des Dashboards muss auf Daten aus der Datei viessmann_events.db zugegriffen werden, die durch die Software
+vieventlog erzeugt und fortgeschrieben wird.
+
+vieventlog ist ein Open-Source-Projekt von Matthias Schneider.
+
+Der vollständige Quellcode ist verfügbar unter:
+https://github.com/mschneider82/vieventlog
+
+vieventlog steht unter der MIT License.
+
+Die MIT Lizenzbedingungen sind abrufbar unter:
+https://mit-license.org
+
+Dieses Projekt ist unabhängig von vieventlog und steht in keiner geschäftlichen oder organisatorischen Verbindung zu dessen Autor.
+
+7.3 Lizenz dieses Repositories
+
+Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-, Datenbank- und Skript-Dateien (zusammen: Repository-Dateien) stehen unter der Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+Die Lizenzbedingungen können hier abgerufen werden:
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+Innerhalb der Lizenz ist Folgendes erlaubt:
+	•	Nutzung der Dashboard-Dateien
+	•	Weitergabe an Dritte
+	•	Bearbeitung / Anpassung der Dateien
+	•	Redistribution / erneute Veröffentlichung
+
+Namensnennung des Urhebers ist erforderlich.
+
+© 2026 Hans-Hermann Gröger
+
+7.4 Haftungsausschluss
+
+Die Bereitstellung der Repository-Dateien erfolgt unentgeltlich.
+
+Eine Haftung für Sach- oder Rechtsmängel ist ausgeschlossen, sofern nicht Vorsatz oder grobe Fahrlässigkeit vorliegt.
+
+Für Schäden, die aus der Nutzung oder Nichtnutzung der bereitgestellten Inhalte entstehen, wird – außer in Fällen zwingender gesetzlicher Haftung – keine Haftung übernommen.
+
+Der Nutzer ist selbst verantwortlich für:
+- Installation
+- Konfiguration
+- Datensicherung
+- Systemsicherheit
+
+7.5 Kein Support
+
+Ein Anspruch auf Support, Wartung oder Weiterentwicklung besteht nicht.
+
+7.6 Keine Verbindung zu Grafana Labs
+
+Dieses Projekt steht in keiner Verbindung zu Grafana Labs und wird von diesem Unternehmen weder unterstützt noch zertifiziert.
+
+Alle Produkt- und Markennamen sind Eigentum ihrer jeweiligen Inhaber.
+
+English Version:
+
+1. Grafana Dependency
+
+This dashboard was developed for use with Grafana OSS, a product of Grafana Labs.
+
+Grafana OSS is licensed under the
+GNU Affero General Public License v3.0 (AGPLv3).
+
+The full source code of Grafana is available at:
+https://github.com/grafana/grafana
+
+The AGPLv3 license text is available at:
+https://www.gnu.org/licenses/agpl-3.0.txt
+
+This repository does not contain, distribute, or modify Grafana itself.
+Users must install and maintain their own Grafana instance.
+
+Under the AGPL, disclosure obligations apply only to modifications of AGPL-licensed software. This repository contains configuration and dashboard files only and does not modify Grafana.
+
+2. Database Dependency
+
+The dashboard needs to import data from the file viessmann_events.db, which is generated and maintained by
+vieventlog.
+
+vieventlog is an open-source project developed by Matthias Schneider.
+
+The source code is available at:
+https://github.com/mschneider82/vieventlog
+
+vieventlog is licensed under the MIT License.
+
+The MIT license text is available at:
+https://mit-license.org
+
+This project is independent from vieventlog and is not affiliated with its author.
+
+3. License of This Repository
+
+All Grafana dashboard JSON files, database files and script files (together: Repository Files) contained in this repository are licensed under:
+
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Full license text:
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+You are free to:
+- Use
+- Share
+- Modify
+- Redistribute
+
+Attribution to the original author is required.
+
+© 2026 Hans-Hermann Gröger
+
+4. Disclaimer
+
+THE REPOSITORY FILES ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE AUTHOR SHALL NOT BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT, OR OTHERWISE, ARISING FROM OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.
+
+The user is solely responsible for:
+- Installation
+- Configuration
+- Data backup
+- System security
+
+Compliance with applicable laws and licenses
+
+5. No Affiliation
+
+This project is not affiliated with, endorsed by, sponsored by, or otherwise associated with Grafana Labs.
+
+All product names, trademarks, and registered trademarks mentioned are the property of their respective owners.
    
