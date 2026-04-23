@@ -57,7 +57,7 @@ Der vollständige Quellcode ist verfügbar unter: https://github.com/mschneider8
 
 vieventlog ist unter der MIT-Lizenz lizenziert. Lizenzbedingungen: https://mit-license.org
 
-Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien und Datenbank-Dateien stehen unter der Creative Commons Attribution 4.0 International (CC BY 4.0).
+Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien, Datenbank-Dateien und Skript-Dateien stehen unter der Creative Commons Attribution 4.0 International (CC BY 4.0).
 
 Die Lizenzbedingungen können hier abgerufen werden: https://creativecommons.org/licenses/by/4.0/legalcode
 
