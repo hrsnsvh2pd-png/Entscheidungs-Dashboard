@@ -22,9 +22,9 @@ Lizenz: MIT (https://mit-license.org/)
 
 Dieses Dashboard ist ein eigenständiges Community-Projekt und steht in keiner offiziellen Verbindung zu vieventlog oder dessen Autor.
 
-4. Lizenz der in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien und Datenbank-Dateien
+4. Lizenz der in diesem Repository enthaltenen Grafana-Dashboard-JSON-, Datenbank- und Skript-Dateien
 
-Die in diesem Repository enthaltenen Grafana-Dashboard-JSON- und Datenbank-Dateien stehen unter:
+Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-, Datenbank- und Skript-Dateien stehen unter:
 
 Creative Commons Attribution 4.0 International (CC BY 4.0)
 
