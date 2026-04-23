@@ -8,7 +8,11 @@ Lizenztext: https://www.gnu.org/licenses/agpl-3.0.txt
 
 Dieses Repository enthält keine Modifikationen an Grafana. Eine eigene Grafana-Instanz ist erforderlich, um das Dashboard zu nutzen. Offenlegungspflichten gemäß AGPLv3 betreffen nur Modifikationen an Grafana selbst und nicht die in diesem Repository enthaltenen Dashboard-Dateien.
 
-2. vieventlog
+2. SQLite
+
+SQLite ist Public Domain. Die Lizenz- und Nutzungsbedingungen können hier eingesehen werden: https://sqlite.org/copyright.html
+
+3. vieventlog
 
 Das Dashboard verwendet die Datei viessmann_events.db, die durch vieventlog, ein Open-Source-Projekt von Matthias Schneider, erzeugt und fortgeschrieben wird.
 
@@ -18,7 +22,7 @@ Lizenz: MIT (https://mit-license.org/)
 
 Dieses Dashboard ist ein eigenständiges Community-Projekt und steht in keiner offiziellen Verbindung zu vieventlog oder dessen Autor.
 
-3. Lizenz der in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien
+4. Lizenz der in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien und Datenbank-Dateien
 
 Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien stehen unter:
 
@@ -32,9 +36,9 @@ Lizenztext: https://creativecommons.org/licenses/by/4.0/legalcode
 
 © 2026 [Name des Autors]
 
-4. Haftungsausschluss
+5. Haftungsausschluss
 
-Die Dashboard-Dateien werden „wie besehen“ bereitgestellt.
+Die Dashboard-und Datenbank-Dateien werden „wie besehen“ bereitgestellt.
 
 Es wird keine Gewährleistung für Funktion, Eignung für einen bestimmten Zweck oder Fehlerfreiheit übernommen.
 
@@ -44,7 +48,7 @@ Die Verantwortung für Installation, Konfiguration, Datensicherung, Systemsicher
 
 THE DASHBOARD FILES ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
 
-5. Marken & Zugehörigkeit
+6. Marken & Zugehörigkeit
 
 Grafana ist eine eingetragene Marke von Grafana Labs.
 
@@ -52,7 +56,7 @@ vieventlog ist ein Projekt von Matthias Schneider.
 
 Dieses Projekt ist unabhängig und wird weder von Grafana Labs noch von Matthias Schneider unterstützt oder zertifiziert.
 
-6. Community-Hinweis
+7. Community-Hinweis
 
 Dieses Dashboard ist ein Community-Projekt.
 Ein besonderer Dank gilt allen Entwickler:innen und Contributor:innen der Grafana-Plattform sowie Matthias Schneider für die Bereitstellung von vieventlog als Open-Source-Projekt.
