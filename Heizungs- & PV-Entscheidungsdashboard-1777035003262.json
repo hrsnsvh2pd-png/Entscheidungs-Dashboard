@@ -1,0 +1,2559 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_FRSER-SQLITE-DATASOURCE-1",
+      "label": "frser-sqlite-datasource-1",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "frser-sqlite-datasource",
+      "pluginName": "SQLite"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "frser-sqlite-datasource",
+      "name": "SQLite",
+      "version": "4.0.2"
+    },
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "12.3.2"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "state-timeline",
+      "name": "State timeline",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "frser-sqlite-datasource",
+          "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+        },
+        "enable": true,
+        "filter": {
+          "exclude": false,
+          "ids": [
+            3,
+            27,
+            4
+          ]
+        },
+        "hide": false,
+        "iconColor": "green",
+        "mappings": {
+          "time": {
+            "source": "field",
+            "value": "zeitfenster_start"
+          },
+          "timeEnd": {
+            "source": "field",
+            "value": "zeitfenster_end"
+          }
+        },
+        "name": "PV-Fenster",
+        "target": {
+          "queryText": "SELECT  \n  'PV-Fenster' as text,\n  cast(strftime('%s', timestamp, 'utc') as integer) *1000 as zeitfenster_start,\n  cast(strftime('%s', timestamp, 'utc', '+3 hours') as integer) *1000 as zeitfenster_end\nFROM pv_window\n WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold') and datetime(timestamp) >= datetime('now', 'localtime') and\n        (strftime('%F %T', timestamp) between datetime($__from/1000, 'unixepoch', 'localtime') and datetime($__to/1000, 'unixepoch', 'localtime'))\n        ORDER BY timestamp asc, pv_next_peak DESC\n Limit 1\n;",
+          "queryType": "table",
+          "rawQueryText": "SELECT  \n  'PV-Fenster' as text,\n  cast(strftime('%s', timestamp, 'utc') as integer) *1000 as zeitfenster_start,\n  cast(strftime('%s', timestamp, 'utc', '+3 hours') as integer) *1000 as zeitfenster_end\nFROM pv_window\n WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold') and datetime(timestamp) >= datetime('now', 'localtime') and\n        (strftime('%F %T', timestamp) between datetime($__from/1000, 'unixepoch', 'localtime') and datetime($__to/1000, 'unixepoch', 'localtime'))\n        ORDER BY timestamp asc, pv_next_peak DESC\n Limit 1\n;",
+          "refId": "Anno",
+          "timeColumns": []
+        }
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Dashboard",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://192.168.178.3:3030/d/viessmann-all-in-one/viessmann-warmepumpe-e28093-all-in-one-dashboard?orgId=1&kiosk=true&from=now%2Fd&to=now%2Fd&timezone=Europe%2FBerlin&var-korrekturfaktor=1.055&var-start_wirtschaftsjahr=23.12.2025&var-anlage_id=1234567&var-granularity=%27Monat%27&refresh=30s"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": false,
+      "title": " Entscheidungs-DB",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://192.168.178.3:3040"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 0,
+        "y": 0
+      },
+      "id": 26,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Mögliche Aktion \n#### innerhalb des Prognosezeitraums\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.3.2",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "HEAT_MIDDAY": {
+                  "color": "yellow",
+                  "index": 2,
+                  "text": "PV nutzen"
+                },
+                "HEAT_NOW": {
+                  "color": "blue",
+                  "index": 3,
+                  "text": "Heizen vorziehen"
+                },
+                "REDUCE": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "Heizen verschieben"
+                },
+                "STABLE": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Keine Änderung"
+                },
+                "WAIT_SOLAR": {
+                  "color": "dark-orange",
+                  "index": 4,
+                  "text": "Solarthermie"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 7,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^decision$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "table",
+          "queryText": "WITH cfg AS (\n    SELECT\n        MAX(CASE WHEN key='solar_threshold' THEN CAST(value AS REAL) END) AS solar_threshold,\n        MAX(CASE WHEN key='min_solar_buffer_threshold' THEN CAST(value AS REAL) END) AS min_buffer,\n        MAX(CASE WHEN key='solar_buffer_threshold' THEN CAST(value AS REAL) END) AS max_buffer\n    FROM meta_config\n),\nbuf AS (\n    SELECT buffer_temp\n    FROM system_snapshot\n    ORDER BY timestamp_mez DESC\n    LIMIT 1\n)\n\nSELECT \n    strftime('%F %H:00:00', d.timestamp),\n\n    CASE\n        WHEN d.radiation > cfg.solar_threshold\n         AND buf.buffer_temp BETWEEN cfg.min_buffer AND cfg.max_buffer\n        THEN 'WAIT_SOLAR'\n        ELSE d.action\n    END AS decision\n\nFROM decision_logic d\nCROSS JOIN cfg\nCROSS JOIN buf\n\nWHERE strftime('%F %H:00:00','now','localtime','+1 hour')\n      = strftime('%F %H:00:00', d.timestamp);",
+          "queryType": "table",
+          "rawQueryText": "WITH cfg AS (\n    SELECT\n        MAX(CASE WHEN key='solar_threshold' THEN CAST(value AS REAL) END) AS solar_threshold,\n        MAX(CASE WHEN key='min_solar_buffer_threshold' THEN CAST(value AS REAL) END) AS min_buffer,\n        MAX(CASE WHEN key='solar_buffer_threshold' THEN CAST(value AS REAL) END) AS max_buffer\n    FROM meta_config\n),\nbuf AS (\n    SELECT buffer_temp\n    FROM system_snapshot\n    ORDER BY timestamp_mez DESC\n    LIMIT 1\n)\n\nSELECT \n    strftime('%F %H:00:00', d.timestamp),\n\n    CASE\n        WHEN d.radiation > cfg.solar_threshold\n         AND buf.buffer_temp BETWEEN cfg.min_buffer AND cfg.max_buffer\n        THEN 'WAIT_SOLAR'\n        ELSE d.action\n    END AS decision\n\nFROM decision_logic d\nCROSS JOIN cfg\nCROSS JOIN buf\n\nWHERE strftime('%F %H:00:00','now','localtime','+1 hour')\n      = strftime('%F %H:00:00', d.timestamp);",
+          "rawSql": "SELECT action FROM decision_logic ORDER BY timestamp DESC LIMIT 1;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "GOOD": {
+                  "index": 2
+                },
+                "Ja": {
+                  "color": "green",
+                  "index": 1
+                },
+                "Nein": {
+                  "color": "dark-red",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "text"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temp_now"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 17,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT\n 'Wohnort' as text,\n temp_now\n from weather_forecast\n where datetime('now', 'localtime', '+1 hour') >= datetime(timestamp)\n order by timestamp desc\n Limit 1\n \n\n ",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n 'Wohnort' as text,\n temp_now\n from weather_forecast\n where datetime('now', 'localtime', '+1 hour') >= datetime(timestamp)\n order by timestamp desc\n Limit 1\n \n\n ",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "GOOD": {
+                  "index": 2
+                },
+                "Ja": {
+                  "color": "green",
+                  "index": 1
+                },
+                "Nein": {
+                  "color": "dark-red",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "text"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 21,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT\nstrftime('%d.%m.%Y', 'now', 'localtime') as Datum,\nstrftime('%R','now','localtime') AS Zeit",
+          "queryType": "table",
+          "rawQueryText": "SELECT\nstrftime('%d.%m.%Y', 'now', 'localtime') as Datum,\nstrftime('%R','now','localtime') AS Zeit",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "transparent",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 7,
+        "y": 2
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 15
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "table",
+          "queryText": "WITH current_action AS (\n    SELECT action\n    FROM decision_logic\n    WHERE datetime(timestamp) >= datetime('now','localtime')\n    ORDER BY datetime(timestamp)\n    LIMIT 1\n)\nSELECT \n'neue mögliche Aktion voraussichtlich am   '|| strftime('%d.%m.%Y', datetime(timestamp), '-1 hour') || ' nach ' || strftime(' %H:%M', datetime(timestamp), '-1 hour') || ' Uhr'\nFROM decision_logic\nWHERE datetime(timestamp) > datetime('now','localtime')\n  AND action <> (SELECT action FROM current_action)\nORDER BY datetime(timestamp)\nLIMIT 1",
+          "queryType": "table",
+          "rawQueryText": "WITH current_action AS (\n    SELECT action\n    FROM decision_logic\n    WHERE datetime(timestamp) >= datetime('now','localtime')\n    ORDER BY datetime(timestamp)\n    LIMIT 1\n)\nSELECT \n'neue mögliche Aktion voraussichtlich am   '|| strftime('%d.%m.%Y', datetime(timestamp), '-1 hour') || ' nach ' || strftime(' %H:%M', datetime(timestamp), '-1 hour') || ' Uhr'\nFROM decision_logic\nWHERE datetime(timestamp) > datetime('now','localtime')\n  AND action <> (SELECT action FROM current_action)\nORDER BY datetime(timestamp)\nLIMIT 1",
+          "rawSql": "SELECT action FROM decision_logic ORDER BY timestamp DESC LIMIT 1;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#eaedf2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "color-background"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 18,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": false
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "WITH cfg AS (\n    SELECT\n        MAX(CASE WHEN key='solar_threshold' THEN CAST(value AS REAL) END) AS solar_threshold,\n        MAX(CASE WHEN key='min_solar_buffer_threshold' THEN CAST(value AS REAL) END) AS min_buffer,\n        MAX(CASE WHEN key='solar_buffer_threshold' THEN CAST(value AS REAL) END) AS max_buffer\n    FROM meta_config\n),\nbuf AS (\n    SELECT buffer_temp\n    FROM system_snapshot\n    ORDER BY timestamp_mez DESC\n    LIMIT 1\n),\nsolar AS (\n    SELECT\n        CASE\n            WHEN d.radiation > cfg.solar_threshold\n             AND buf.buffer_temp BETWEEN cfg.min_buffer AND cfg.max_buffer\n            THEN 1 ELSE 0\n        END AS solar_active\n    FROM decision_logic d\n    CROSS JOIN cfg\n    CROSS JOIN buf\n    WHERE strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n          = strftime('%F %H:00:00', d.timestamp)\n    LIMIT 1\n),\ndecision AS (\n    SELECT action\n    FROM decision_logic\n    WHERE strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n          = strftime('%F %H:00:00', timestamp)\n)\n\nSELECT\n    col1,\n    col2,\n    col3,\n    col4,\n    col5\nFROM (\n    SELECT\n        text1   AS col1,\n        text2   AS col2,\n        text3   AS col3,\n        text4   AS col4,\n        text5   AS col5,\n        action\n    FROM action_measures\n\n    UNION ALL\n\n    SELECT\n        content1 AS col1,\n        content2 AS col2,\n        content3 AS col3,\n        content4 AS col4,\n        content5 AS col5,\n        action\n    FROM action_measures\n) am\nCROSS JOIN solar\nWHERE action = (SELECT action FROM decision)\n  AND solar.solar_active = 0;",
+          "queryType": "table",
+          "rawQueryText": "WITH cfg AS (\n    SELECT\n        MAX(CASE WHEN key='solar_threshold' THEN CAST(value AS REAL) END) AS solar_threshold,\n        MAX(CASE WHEN key='min_solar_buffer_threshold' THEN CAST(value AS REAL) END) AS min_buffer,\n        MAX(CASE WHEN key='solar_buffer_threshold' THEN CAST(value AS REAL) END) AS max_buffer\n    FROM meta_config\n),\nbuf AS (\n    SELECT buffer_temp\n    FROM system_snapshot\n    ORDER BY timestamp_mez DESC\n    LIMIT 1\n),\nsolar AS (\n    SELECT\n        CASE\n            WHEN d.radiation > cfg.solar_threshold\n             AND buf.buffer_temp BETWEEN cfg.min_buffer AND cfg.max_buffer\n            THEN 1 ELSE 0\n        END AS solar_active\n    FROM decision_logic d\n    CROSS JOIN cfg\n    CROSS JOIN buf\n    WHERE strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n          = strftime('%F %H:00:00', d.timestamp)\n    LIMIT 1\n),\ndecision AS (\n    SELECT action\n    FROM decision_logic\n    WHERE strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n          = strftime('%F %H:00:00', timestamp)\n)\n\nSELECT\n    col1,\n    col2,\n    col3,\n    col4,\n    col5\nFROM (\n    SELECT\n        text1   AS col1,\n        text2   AS col2,\n        text3   AS col3,\n        text4   AS col4,\n        text5   AS col5,\n        action\n    FROM action_measures\n\n    UNION ALL\n\n    SELECT\n        content1 AS col1,\n        content2 AS col2,\n        content3 AS col3,\n        content4 AS col4,\n        content5 AS col5,\n        action\n    FROM action_measures\n) am\nCROSS JOIN solar\nWHERE action = (SELECT action FROM decision)\n  AND solar.solar_active = 0;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "Mögliche Maßnahmen (Wirkung von links nach rechts abnehmend)",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisPlacement": "auto",
+            "axisWidth": 35,
+            "fillOpacity": 100,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineWidth": 0,
+            "spanNulls": false
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "1 HEAT_NOW": {
+                  "color": "blue",
+                  "index": 0,
+                  "text": "Heizen vorziehen"
+                },
+                "2 HEAT_MIDDAY": {
+                  "color": "dark-yellow",
+                  "index": 2,
+                  "text": "PV nutzen"
+                },
+                "3 REDUCE": {
+                  "color": "semi-dark-red",
+                  "index": 3,
+                  "text": "Heizen verschieben"
+                },
+                "4 STABLE": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "keine Änderung"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 28,
+      "options": {
+        "alignValue": "center",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "mergeValues": false,
+        "rowHeight": 1,
+        "showValue": "auto",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "queryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\r\n       \r\n    CASE\r\n        WHEN action = 'HEAT_NOW' THEN '1 HEAT_NOW'\r\n        WHEN action = 'HEAT_MIDDAY' THEN NULL\r\n        WHEN action = 'REDUCE' THEN NULL\r\n        WHEN action = 'STABLE' THEN NULL\r\n        END as '       '\r\n    from aktions_zustaende\r\n    where installation_id = 1234567 and \r\n          datetime(time_start) >= datetime('now', 'localtime') \r\norder by time_start asc\r\n       \r\n\r\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\r\n       \r\n    CASE\r\n        WHEN action = 'HEAT_NOW' THEN '1 HEAT_NOW'\r\n        WHEN action = 'HEAT_MIDDAY' THEN NULL\r\n        WHEN action = 'REDUCE' THEN NULL\r\n        WHEN action = 'STABLE' THEN NULL\r\n        END as '       '\r\n    from aktions_zustaende\r\n    where installation_id = ${anlage_id} and \r\n          datetime(time_start) >= datetime('now', 'localtime') \r\norder by time_start asc\r\n       \r\n\r\n",
+          "rawSql": "SELECT timestamp as time, pv_kw as value FROM pv_estimate ORDER BY timestamp;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "hide": false,
+          "queryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\n       \n    CASE\n        WHEN action = 'HEAT_NOW' THEN NULL\n        WHEN action = 'HEAT_MIDDAY' THEN '2 HEAT_MIDDAY'\n        WHEN action = 'REDUCE' THEN NULL\n        WHEN action = 'STABLE' THEN NULL\n        END as '       '\n    from aktions_zustaende\n    where installation_id = 1234567 and \n          datetime(time_start) >= datetime('now', 'localtime') \norder by time_start asc",
+          "queryType": "table",
+          "rawQueryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\n       \n    CASE\n        WHEN action = 'HEAT_NOW' THEN NULL\n        WHEN action = 'HEAT_MIDDAY' THEN '2 HEAT_MIDDAY'\n        WHEN action = 'REDUCE' THEN NULL\n        WHEN action = 'STABLE' THEN NULL\n        END as '       '\n    from aktions_zustaende\n    where installation_id = ${anlage_id} and \n          datetime(time_start) >= datetime('now', 'localtime') \norder by time_start asc",
+          "refId": "B",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "hide": false,
+          "queryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\n       \n    CASE\n        WHEN action = 'HEAT_NOW' THEN NULL\n        WHEN action = 'HEAT_MIDDAY' THEN NULL\n        WHEN action = 'REDUCE' THEN '3 REDUCE'\n        WHEN action = 'STABLE' THEN NULL\n        END as '       '\n    from aktions_zustaende\n    where installation_id = 1234567 and \n          datetime(time_start) >= datetime('now', 'localtime') \norder by time_start asc",
+          "queryType": "table",
+          "rawQueryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\n       \n    CASE\n        WHEN action = 'HEAT_NOW' THEN NULL\n        WHEN action = 'HEAT_MIDDAY' THEN NULL\n        WHEN action = 'REDUCE' THEN '3 REDUCE'\n        WHEN action = 'STABLE' THEN NULL\n        END as '       '\n    from aktions_zustaende\n    where installation_id = ${anlage_id} and \n          datetime(time_start) >= datetime('now', 'localtime') \norder by time_start asc",
+          "refId": "C",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "hide": false,
+          "queryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\n       \n    CASE\n        WHEN action = 'HEAT_NOW' THEN NULL\n        WHEN action = 'HEAT_MIDDAY' THEN NULL\n        WHEN action = 'REDUCE' THEN NULL\n        WHEN action = 'STABLE' THEN '4 STABLE'\n        END as '       '\n    from aktions_zustaende\n    where installation_id = 1234567 and \n          datetime(time_start) >= datetime('now', 'localtime') \norder by time_start asc",
+          "queryType": "table",
+          "rawQueryText": "SELECT  CAST(strftime('%s', time_start, 'utc') AS INTEGER) AS time,\n       \n    CASE\n        WHEN action = 'HEAT_NOW' THEN NULL\n        WHEN action = 'HEAT_MIDDAY' THEN NULL\n        WHEN action = 'REDUCE' THEN NULL\n        WHEN action = 'STABLE' THEN '4 STABLE'\n        END as '       '\n    from aktions_zustaende\n    where installation_id = ${anlage_id} and \n          datetime(time_start) >= datetime('now', 'localtime') \norder by time_start asc",
+          "refId": "D",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Aktions-Zeitplan",
+      "type": "state-timeline"
+    },
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 31,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "###\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.3.2",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 1,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 16
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^date_diff$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 35
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "queryText": "SELECT datetime(timestamp), datetime('now', 'localtime'),\r\n        temp_12h - temp_now as date_diff\r\n        FROM weather_forecast\r\n        where datetime(timestamp) >=  datetime('now', 'localtime')\r\n        ORDER BY timestamp ASC\r\n        LIMIT 1\r\n   ",
+          "queryType": "table",
+          "rawQueryText": "SELECT datetime(timestamp), datetime('now', 'localtime'),\r\n        temp_12h - temp_now as date_diff\r\n        FROM weather_forecast\r\n        where datetime(timestamp) >=  datetime('now', 'localtime')\r\n        ORDER BY timestamp ASC\r\n        LIMIT 1\r\n   ",
+          "rawSql": "SELECT timestamp as time, delta_12h as value FROM weather_trend ORDER BY timestamp;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "ΔT (12h) Prognose aktuell",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 1,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 3,
+        "y": 16
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 23
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "queryText": "SELECT \r\n(select value from meta_config where key = 'temp_verlust_gebaeude') *\r\n(select value from meta_config where key = 'comfort_time_reference_value')\r\n/\r\ncooling_rate\r\nas comfort_time,\r\n'Std.' as text\r\nfrom cooling_rate\r\n where datetime(timestamp) >=  datetime('now', 'localtime')\r\n        ORDER BY timestamp ASC\r\n        LIMIT 1\r\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT \r\n(select value from meta_config where key = 'temp_verlust_gebaeude') *\r\n(select value from meta_config where key = 'comfort_time_reference_value')\r\n/\r\ncooling_rate\r\nas comfort_time,\r\n'Std.' as text\r\nfrom cooling_rate\r\n where datetime(timestamp) >=  datetime('now', 'localtime')\r\n        ORDER BY timestamp ASC\r\n        LIMIT 1\r\n",
+          "rawSql": "SELECT timestamp as time, delta_12h as value FROM weather_trend ORDER BY timestamp;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Komfortzeit",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "GOOD": {
+                  "index": 2
+                },
+                "Ja": {
+                  "color": "green",
+                  "index": 1
+                },
+                "Nein": {
+                  "color": "dark-red",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 5,
+        "y": 16
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Zeitfenster$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 20
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT strftime('%F %T', timestamp), datetime(1776642015706/1000, 'unixepoch', 'localtime\n'),\n  strftime('%d.%m.%Y %H:%M', timestamp) as Zeitfenster,\n  pv_kw as 'Wert'\n FROM pv_window\n        WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold') and datetime(timestamp) >= datetime('now', 'localtime') and \n        (strftime('%F %T', timestamp) between datetime(1776469215706/1000, 'unixepoch', 'localtime') and datetime(1776642015706/1000, 'unixepoch', 'localtime'))\n        ORDER BY timestamp asc, pv_next_peak DESC\n        LIMIT 1\n\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT strftime('%F %T', timestamp), datetime($__to/1000, 'unixepoch', 'localtime\n'),\n  strftime('%d.%m.%Y %H:%M', timestamp) as Zeitfenster,\n  pv_kw as 'Wert'\n FROM pv_window\n        WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold') and datetime(timestamp) >= datetime('now', 'localtime') and \n        (strftime('%F %T', timestamp) between datetime($__from/1000, 'unixepoch', 'localtime') and datetime($__to/1000, 'unixepoch', 'localtime'))\n        ORDER BY timestamp asc, pv_next_peak DESC\n        LIMIT 1\n\n",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "nächstes PV-Fenster",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "kwatt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 8,
+        "y": 16
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "WITH start_window AS (\n    SELECT timestamp\n    FROM (\n        SELECT \n            timestamp,\n            MAX(pv_kw) OVER (\n                ORDER BY timestamp\n                ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING\n            ) AS pv_next_peak\n        FROM pv_estimate\n        WHERE datetime(timestamp) >= datetime('now','localtime')\n          AND strftime('%F %T', timestamp) BETWEEN datetime($__from/1000, 'unixepoch', 'localtime') \n                                              AND datetime($__to/1000, 'unixepoch', 'localtime')\n    )\n    WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold')\n    ORDER BY timestamp\n    LIMIT 1\n),\n\nwindow_rows AS (\n    SELECT timestamp, \n    pv_kw\n    FROM pv_estimate\n    WHERE timestamp >= (SELECT timestamp FROM start_window)\n    ORDER BY timestamp\n    LIMIT 4\n),\n\npv_leistung as (\n    select \n    sum(pv_kw) as pv_leistung_pv_window\n    from window_rows\n)\n\nSELECT \n   (Select pv_leistung_pv_window from pv_leistung) as 'PV-Leistung',\n   pv_kw AS Peak\n   FROM window_rows\nORDER BY pv_kw DESC\nLIMIT 1;",
+          "queryType": "table",
+          "rawQueryText": "WITH start_window AS (\n    SELECT timestamp\n    FROM (\n        SELECT \n            timestamp,\n            MAX(pv_kw) OVER (\n                ORDER BY timestamp\n                ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING\n            ) AS pv_next_peak\n        FROM pv_estimate\n        WHERE datetime(timestamp) >= datetime('now','localtime')\n          AND strftime('%F %T', timestamp) BETWEEN datetime($__from/1000, 'unixepoch', 'localtime') \n                                              AND datetime($__to/1000, 'unixepoch', 'localtime')\n    )\n    WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold')\n    ORDER BY timestamp\n    LIMIT 1\n),\n\nwindow_rows AS (\n    SELECT timestamp, \n    pv_kw\n    FROM pv_estimate\n    WHERE timestamp >= (SELECT timestamp FROM start_window)\n    ORDER BY timestamp\n    LIMIT 4\n),\n\npv_leistung as (\n    select \n    sum(pv_kw) as pv_leistung_pv_window\n    from window_rows\n)\n\nSELECT \n   (Select pv_leistung_pv_window from pv_leistung) as 'PV-Leistung',\n   pv_kw AS Peak\n   FROM window_rows\nORDER BY pv_kw DESC\nLIMIT 1;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "PV-Leistung und Peak nächstes PV-Fenster",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 10.2040816327
+              },
+              {
+                "color": "green",
+                "value": 40.8163265306
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 15,
+        "y": 16
+      },
+      "id": 25,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Prozent$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT \ndatetime(strftime('%F %T', timestamp)),\npv_kw / (SELECT value FROM meta_config WHERE key='pv_kwp') * 100 as Prozent\nFROM pv_estimate\nwhere datetime(strftime('%F %T', timestamp)) >= datetime('now', 'localtime')\nORDER BY timestamp asc\nLimit 1\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT \ndatetime(strftime('%F %T', timestamp)),\npv_kw / (SELECT value FROM meta_config WHERE key='pv_kwp') * 100 as Prozent\nFROM pv_estimate\nwhere datetime(strftime('%F %T', timestamp)) >= datetime('now', 'localtime')\nORDER BY timestamp asc\nLimit 1\n",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "GOOD": {
+                  "color": "dark-green",
+                  "index": 0,
+                  "text": "gut nutzbar"
+                },
+                "NONE": {
+                  "color": "dark-red",
+                  "index": 2,
+                  "text": "nicht nutzbar"
+                },
+                "STRONG": {
+                  "color": "green",
+                  "index": 3,
+                  "text": "Sehr gut nutzbar"
+                },
+                "WEAK": {
+                  "color": "yellow",
+                  "index": 1,
+                  "text": "nutzbar"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 18,
+        "y": 16
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^pv_quality$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 20
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT timestamp, pv_kw,datetime('now', 'localtime'),\n  strftime('%H:%M', timestamp) as Uhrzeit,\n    pv_quality\nFROM pv_logic\nwhere datetime(strftime('%F %T', timestamp)) >= datetime('now', 'localtime')\norder by timestamp asc\nLimit 1",
+          "queryType": "table",
+          "rawQueryText": "SELECT timestamp, pv_kw,datetime('now', 'localtime'),\n  strftime('%H:%M', timestamp) as Uhrzeit,\n    pv_quality\nFROM pv_logic\nwhere datetime(strftime('%F %T', timestamp)) >= datetime('now', 'localtime')\norder by timestamp asc\nLimit 1",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "PV Leistung",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "NONE": {
+                  "color": "dark-red",
+                  "index": 2,
+                  "text": "nicht nutzbar"
+                },
+                "STRONG": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "gut nutzbar"
+                },
+                "WEAK": {
+                  "color": "dark-yellow",
+                  "index": 1,
+                  "text": "nutzbar"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 250
+              },
+              {
+                "color": "dark-green",
+                "value": 400
+              },
+              {
+                "color": "green",
+                "value": 650
+              }
+            ]
+          },
+          "unit": "Wm2"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 21,
+        "y": 16
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^radiation$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 20
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT timestamp, pv_kw,datetime('now', 'localtime'),\n  strftime('%H:%M', timestamp) as Uhrzeit,\n  radiation,\n    case\n        WHEN radiation > 300 THEN 'STRONG'\n        WHEN radiation > 150 THEN 'WEAK'\n        ELSE 'NONE'\n        END AS radiation_quality\nFROM pv_estimate\nwhere datetime(strftime('%F %T', timestamp)) >= datetime('now', 'localtime')\norder by timestamp asc\nLimit 1",
+          "queryType": "table",
+          "rawQueryText": "SELECT timestamp, pv_kw,datetime('now', 'localtime'),\n  strftime('%H:%M', timestamp) as Uhrzeit,\n  radiation,\n    case\n        WHEN radiation > 300 THEN 'STRONG'\n        WHEN radiation > 150 THEN 'WEAK'\n        ELSE 'NONE'\n        END AS radiation_quality\nFROM pv_estimate\nwhere datetime(strftime('%F %T', timestamp)) >= datetime('now', 'localtime')\norder by timestamp asc\nLimit 1",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "Einstrahlung",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 30,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "###\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.3.2",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 2,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "### 48-Stunden-Prognose der Energiemanagement-Parameter\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.3.2",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "axisWidth": 50,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 4,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "kwatt"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "queryText": "SELECT \r\n  CAST(strftime('%s', timestamp, 'utc') AS INTEGER) AS time,\r\n  pv_kw as 'PV-Leistung (Forecast)'\r\nFROM pv_estimate\r\nwhere strftime('%F %H:00:00', timestamp) between datetime(1776488591852/1000, 'unixepoch', 'localtime') \r\n      and datetime(1776661391852/1000, 'unixepoch', 'localtime')",
+          "queryType": "table",
+          "rawQueryText": "SELECT \r\n  CAST(strftime('%s', timestamp, 'utc') AS INTEGER) AS time,\r\n  pv_kw as 'PV-Leistung (Forecast)'\r\nFROM pv_estimate\r\nwhere strftime('%F %H:00:00', timestamp) between datetime($__from/1000, 'unixepoch', 'localtime') \r\n      and datetime($__to/1000, 'unixepoch', 'localtime')",
+          "rawSql": "SELECT timestamp as time, pv_kw as value FROM pv_estimate ORDER BY timestamp;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "hide": false,
+          "queryText": "SELECT\n   cast(strftime('%s', timestamp, 'utc') as integer) as time,\n   delta_12h as 'ΔT (12h)-Trend (Forecast)' \n   from weather_trend\nwhere strftime('%F %H:00:00', timestamp) between datetime(1776488591852/1000, 'unixepoch', 'localtime') \n      and datetime(1776661391852/1000, 'unixepoch', 'localtime')",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n   cast(strftime('%s', timestamp, 'utc') as integer) as time,\n   delta_12h as 'ΔT (12h)-Trend (Forecast)' \n   from weather_trend\nwhere strftime('%F %H:00:00', timestamp) between datetime($__from/1000, 'unixepoch', 'localtime') \n      and datetime($__to/1000, 'unixepoch', 'localtime')",
+          "refId": "B",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Temperaturtrend-Entwicklung & PV-Leistung mit PV-Fenster ",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#eaedf2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-background"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatt"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 33,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT\n            'ΔT (12h) Prognose aktuell' AS Parameter,\n            COALESCE(printf('%.1f °C', temp_12h - temp_now), '0 °C') AS Wert,\n            COALESCE('fällt um mehr als 3 Grad', '') AS Grenzwert\n        FROM weather_forecast\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key='temp_verlust_gebaeude')\n                    * (SELECT value FROM meta_config WHERE key='comfort_time_reference_value')\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE(\n                printf('< %.0f Stunden',\n                    (SELECT value FROM meta_config WHERE key='comfort_time_reference_value')\n                ),\n            '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Verdichter-LZ letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('weniger als 30 Minuten', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('<= 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT * FROM (\n        SELECT '' AS Parameter, '' AS Wert, '' AS Grenzwert\n        UNION ALL\n        SELECT '' , '' , ''\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'HEAT_NOW'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)",
+          "queryType": "table",
+          "rawQueryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT\n            'ΔT (12h) Prognose aktuell' AS Parameter,\n            COALESCE(printf('%.1f °C', temp_12h - temp_now), '0 °C') AS Wert,\n            COALESCE('fällt um mehr als 3 Grad', '') AS Grenzwert\n        FROM weather_forecast\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key='temp_verlust_gebaeude')\n                    * (SELECT value FROM meta_config WHERE key='comfort_time_reference_value')\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE(\n                printf('< %.0f Stunden',\n                    (SELECT value FROM meta_config WHERE key='comfort_time_reference_value')\n                ),\n            '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Verdichter-LZ letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('weniger als 30 Minuten', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('<= 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT * FROM (\n        SELECT '' AS Parameter, '' AS Wert, '' AS Grenzwert\n        UNION ALL\n        SELECT '' , '' , ''\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'HEAT_NOW'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "1 Heizen vorziehen",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#eaedf2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-background"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Grenzwert"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 182
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 21,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT\n            'ΔT (12h) Prognose aktuell' AS Parameter,\n            COALESCE(printf('%.1f °C', temp_12h - temp_now), '0 °C') AS Wert,\n            COALESCE('fällt um mehr als 3 Grad', '') AS Grenzwert\n        FROM weather_forecast\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'nächster PV Peak' AS Parameter,\n            COALESCE(printf('%.2f kW', pv_next_peak), '0.00 kW') AS Wert,\n            COALESCE('>= 2.0 KW', '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n          AND (\n              strftime('%F %T', timestamp)\n              BETWEEN datetime($__from/1000, 'unixepoch', 'localtime')\n                  AND datetime($__to/1000, 'unixepoch', 'localtime')\n          )\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key='temp_verlust_gebaeude') * 6\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'nächstes PV-Fenster' AS Parameter,\n            COALESCE(\n                printf('in ca. %.1f Stunden',\n                    (julianday(timestamp) - julianday('now','localtime')) * 24.0\n                ),\n            '0 h') AS Wert,\n            COALESCE('<= Komfortzeit', '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_next_peak > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n          AND (\n              strftime('%F %T', timestamp)\n              BETWEEN datetime($__from/1000, 'unixepoch', 'localtime')\n                  AND datetime($__to/1000, 'unixepoch', 'localtime')\n          )\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Verdichter-LZ letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('25 - 45 Minuten', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('> 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'HEAT_MIDDAY'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)",
+          "queryType": "table",
+          "rawQueryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT\n            'ΔT (12h) Prognose aktuell' AS Parameter,\n            COALESCE(printf('%.1f °C', temp_12h - temp_now), '0 °C') AS Wert,\n            COALESCE('fällt um mehr als 3 Grad', '') AS Grenzwert\n        FROM weather_forecast\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'nächster PV Peak' AS Parameter,\n            COALESCE(printf('%.2f kW', pv_next_peak), '0.00 kW') AS Wert,\n            COALESCE('>= 2.0 KW', '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_next_peak > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n          AND (\n              strftime('%F %T', timestamp)\n              BETWEEN datetime($__from/1000, 'unixepoch', 'localtime')\n                  AND datetime($__to/1000, 'unixepoch', 'localtime')\n          )\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key='temp_verlust_gebaeude') * 6\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'nächstes PV-Fenster' AS Parameter,\n            COALESCE(\n                printf('in ca. %.1f Stunden',\n                    (julianday(timestamp) - julianday('now','localtime')) * 24.0\n                ),\n            '0 h') AS Wert,\n            COALESCE('<= Komfortzeit', '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_next_peak > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n          AND (\n              strftime('%F %T', timestamp)\n              BETWEEN datetime($__from/1000, 'unixepoch', 'localtime')\n                  AND datetime($__to/1000, 'unixepoch', 'localtime')\n          )\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Verdichter-LZ letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('25 - 45 Minuten', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('> 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'HEAT_MIDDAY'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "2 PV nutzen",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#eaedf2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-background"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatt"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "id": 20,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT\n            'ΔT (12h) Prognose aktuell' AS Parameter,\n            COALESCE(printf('%.1f °C', temp_12h - temp_now), '0 °C') AS Wert,\n            COALESCE('> 3 Grad', '') AS Grenzwert\n        FROM weather_forecast\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key='temp_verlust_gebaeude')\n                    * (SELECT value FROM meta_config WHERE key='comfort_time_reference_value')\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE('> 6 Stunden', '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'nächstes PV-Fenster' AS Parameter,\n            COALESCE(\n                printf('in ca. %.1f Stunden',\n                    (julianday(timestamp) - julianday('now','localtime')) * 24.0\n                ),\n            '0 h') AS Wert,\n            COALESCE('<= Komfortzeit', '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_next_peak > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n          AND (\n              strftime('%F %T', timestamp)\n              BETWEEN datetime($__from/1000, 'unixepoch', 'localtime')\n                  AND datetime($__to/1000, 'unixepoch', 'localtime')\n          )\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressor-Laufzeit letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('< 20', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('> 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            '' AS Parameter,\n            '' AS Wert,\n            '' AS Grenzwert\n        LIMIT 1\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'REDUCE'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)\n      \n",
+          "queryType": "table",
+          "rawQueryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT\n            'ΔT (12h) Prognose aktuell' AS Parameter,\n            COALESCE(printf('%.1f °C', temp_12h - temp_now), '0 °C') AS Wert,\n            COALESCE('> 3 Grad', '') AS Grenzwert\n        FROM weather_forecast\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > (SELECT value FROM meta_config WHERE key='pv_threshold')\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key='temp_verlust_gebaeude')\n                    * (SELECT value FROM meta_config WHERE key='comfort_time_reference_value')\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE('> 6 Stunden', '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'nächstes PV-Fenster' AS Parameter,\n            COALESCE(\n                printf('in ca. %.1f Stunden',\n                    (julianday(timestamp) - julianday('now','localtime')) * 24.0\n                ),\n            '0 h') AS Wert,\n            COALESCE('<= Komfortzeit', '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_next_peak > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n          AND (\n              strftime('%F %T', timestamp)\n              BETWEEN datetime($__from/1000, 'unixepoch', 'localtime')\n                  AND datetime($__to/1000, 'unixepoch', 'localtime')\n          )\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressor-Laufzeit letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('< 20', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('> 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            '' AS Parameter,\n            '' AS Wert,\n            '' AS Grenzwert\n        LIMIT 1\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'REDUCE'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)\n      \n",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "3 Heizen verschieben",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#eaedf2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-background"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatt"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Grenzwert"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 187
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "id": 22,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "queryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT \n            'automatische Anlagen-Steuerung' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key = 'temp_verlust_gebaeude')\n                    * (SELECT value FROM meta_config WHERE key = 'comfort_time_reference_value')\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE('<= 6 Stunden', '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Verdichter-LZ letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('n/a', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('> 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            COALESCE(char(8203), '') AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            COALESCE(char(8203), '') AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'STABLE'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT *\nFROM (\n\n    SELECT *\n    FROM (\n        SELECT \n            'automatische Anlagen-Steuerung' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'ergänzende Informationen: ' AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            'Komfortzeit' AS Parameter,\n            COALESCE(\n                printf('%.1f',\n                    (SELECT value FROM meta_config WHERE key = 'temp_verlust_gebaeude')\n                    * (SELECT value FROM meta_config WHERE key = 'comfort_time_reference_value')\n                    / COALESCE(cooling_rate, 1)\n                ),\n            '0') AS Wert,\n            COALESCE('<= 6 Stunden', '') AS Grenzwert\n        FROM cooling_rate\n        WHERE datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY timestamp ASC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Verdichter-LZ letzte Stunde' AS Parameter,\n            COALESCE(printf('%.0f Minuten', runtime_minutes_1h), '0 Minuten') AS Wert,\n            COALESCE('n/a', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Kompressorstarts letzte Stunde' AS Parameter,\n            COALESCE(compressor_starts_1h, 0) AS Wert,\n            COALESCE('<= 2', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT \n            'Warmwasser-Temp letzte Stunde' AS Parameter,\n            COALESCE(printf('%.1f °C', dhw_temp), '0 °C') AS Wert,\n            COALESCE('> 50 Grad', '') AS Grenzwert\n        FROM system_snapshot\n        WHERE installation_id = ${anlage_id}\n          AND timestamp_mez <= datetime('now','localtime')\n        ORDER BY timestamp_mez DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            COALESCE(char(8203), '') AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n    UNION ALL\n\n    SELECT *\n    FROM (\n        SELECT\n            COALESCE(char(8203), '') AS Parameter,\n            COALESCE(char(8203), '') AS Wert,\n            COALESCE(char(8203), '') AS Grenzwert\n        FROM pv_window\n        WHERE pv_kw > 2\n          AND datetime(timestamp) >= datetime('now', 'localtime')\n        ORDER BY pv_next_peak DESC\n        LIMIT 1\n    )\n\n)\n\nWHERE\n(\n    '${s_decision}' = 'EIN'\n    OR EXISTS (\n        SELECT 1\n        FROM decision_logic\n        WHERE action = 'STABLE'\n          AND strftime('%F %H:00:00', 'now', 'localtime', '+1 hour')\n              = strftime('%F %H:00:00', timestamp)\n    )\n)\n",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ],
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          }
+        }
+      ],
+      "title": "4 Keine Änderung",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "axisWidth": 50,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 5,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "line"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-orange",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "auto"
+              },
+              {
+                "id": "unit",
+                "value": ""
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 51
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "queryText": "SELECT \n  CAST(strftime('%s', timestamp, 'utc') AS INTEGER) AS time,\n  coalesce(cast(replace(temp_now,',', '.') as REAL), 0) * 1.0 as Außentemperatur\nFROM weather_forecast\nwhere strftime('%F %H:00:00', timestamp) between datetime(1776586522287/1000, 'unixepoch', 'localtime') \n      and datetime(1776759322287/1000, 'unixepoch', 'localtime')\nORDER BY time asc\n\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT \n  CAST(strftime('%s', timestamp, 'utc') AS INTEGER) AS time,\n  coalesce(cast(replace(temp_now,',', '.') as REAL), 0) * 1.0 as Außentemperatur\nFROM weather_forecast\nwhere strftime('%F %H:00:00', timestamp) between datetime($__from/1000, 'unixepoch', 'localtime') \n      and datetime($__to/1000, 'unixepoch', 'localtime')\nORDER BY time asc\n\n",
+          "rawSql": "SELECT timestamp as time, temp_now as value FROM weather_forecast ORDER BY timestamp;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "hide": false,
+          "queryText": "SELECT\n   cast(strftime('%s', timestamp, 'utc') as integer) as time,\n\n   ((select value from meta_config where key = 'temp_verlust_gebaeude') * (select value from meta_config where key = 'comfort_time_reference_value'))\n   /\n  cooling_rate\n  as 'Komfortzeit (h)'\n\n   from cooling_rate\n\nwhere strftime('%F %H:00:00', timestamp) between datetime(1776586522287/1000, 'unixepoch', 'localtime') \n      and datetime(1776759322287/1000, 'unixepoch', 'localtime')",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n   cast(strftime('%s', timestamp, 'utc') as integer) as time,\n\n   ((select value from meta_config where key = 'temp_verlust_gebaeude') * (select value from meta_config where key = 'comfort_time_reference_value'))\n   /\n  cooling_rate\n  as 'Komfortzeit (h)'\n\n   from cooling_rate\n\nwhere strftime('%F %H:00:00', timestamp) between datetime($__from/1000, 'unixepoch', 'localtime') \n      and datetime($__to/1000, 'unixepoch', 'localtime')",
+          "refId": "B",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Temperaturverlauf & Komfortzeit-Verlauf mit PV-Fenster",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 58
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.36,
+        "fullHighlight": false,
+        "groupWidth": 0.78,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Achse",
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "hide": false,
+          "queryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  runtime_minutes_1h AS 'Verdichterlaufzeit pro Stunde'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \nORDER BY timestamp_mez desc \nLimit 12\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  runtime_minutes_1h AS 'Verdichterlaufzeit pro Stunde'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \nORDER BY timestamp_mez desc \nLimit 12\n",
+          "rawSql": "SELECT strftime('%Y-%m-%d %H:00:00', timestamp) as time, SUM(runtime_seconds)/3600.0 as value FROM heatpump_runtime GROUP BY time ORDER BY time;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Verdichterlaufzeit (min/h) ab jetzt",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 3
+              },
+              {
+                "color": "dark-red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 58
+      },
+      "id": 19,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.36,
+        "fullHighlight": false,
+        "groupWidth": 0.78,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Achse",
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "hide": false,
+          "queryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  compressor_starts_1h AS 'Kompressorstarts pro Stunde'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \n    \nORDER BY timestamp_mez desc \nLimit 12\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  compressor_starts_1h AS 'Kompressorstarts pro Stunde'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \n    \nORDER BY timestamp_mez desc \nLimit 12\n",
+          "rawSql": "SELECT strftime('%Y-%m-%d %H:00:00', timestamp) as time, SUM(runtime_seconds)/3600.0 as value FROM heatpump_runtime GROUP BY time ORDER BY time;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Kompressorstarts je  Stunde ab jetzt",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 58
+      },
+      "id": 34,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.36,
+        "fullHighlight": false,
+        "groupWidth": 0.78,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Achse",
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "hide": false,
+          "queryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  buffer_temp AS 'Pufferspeicher-Temperatur'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \n    \nORDER BY timestamp_mez desc \nLimit 12\n\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  buffer_temp AS 'Pufferspeicher-Temperatur'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \n    \nORDER BY timestamp_mez desc \nLimit 12\n\n",
+          "rawSql": "SELECT strftime('%Y-%m-%d %H:00:00', timestamp) as time, SUM(runtime_seconds)/3600.0 as value FROM heatpump_runtime GROUP BY time ORDER BY time;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Pufferspeicher-Temperatur am Ende der Stunde",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-orange",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 58
+      },
+      "id": 23,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.36,
+        "fullHighlight": false,
+        "groupWidth": 0.78,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Achse",
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+          },
+          "format": "time_series",
+          "hide": false,
+          "queryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  dhw_temp AS 'Warmwasser-Temperatur'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \n    \nORDER BY timestamp_mez desc \nLimit 12\n",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n  CAST(strftime('%s', timestamp_mez, 'utc') AS INTEGER) AS time,\n  strftime('%H:00', timestamp_mez) as Achse, \n  dhw_temp AS 'Warmwasser-Temperatur'\nFROM system_snapshot\nwhere installation_id = ${anlage_id} \n    \nORDER BY timestamp_mez desc \nLimit 12\n",
+          "rawSql": "SELECT strftime('%Y-%m-%d %H:00:00', timestamp) as time, SUM(runtime_seconds)/3600.0 as value FROM heatpump_runtime GROUP BY time ORDER BY time;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Warmwasser-Temperatur am Ende der Stunde",
+      "type": "barchart"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "frser-sqlite-datasource",
+          "uid": "${DS_FRSER-SQLITE-DATASOURCE-1}"
+        },
+        "definition": "select installation_id from system_snapshot  group by installation_id",
+        "description": "Anlage auswählen",
+        "label": "Anlage",
+        "name": "anlage_id",
+        "options": [],
+        "query": "select installation_id from system_snapshot  group by installation_id",
+        "refresh": 1,
+        "regex": "",
+        "sort": 4,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "EIN",
+          "value": "EIN"
+        },
+        "label": "Alternative Aktionen",
+        "name": "s_decision",
+        "options": [
+          {
+            "selected": true,
+            "text": "EIN",
+            "value": "EIN"
+          },
+          {
+            "selected": false,
+            "text": "AUS",
+            "value": "AUS"
+          }
+        ],
+        "query": "EIN, AUS",
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now",
+    "to": "now+48h"
+  },
+  "timepicker": {},
+  "timezone": "Europe/Berlin",
+  "title": "Heizungs- & PV-Entscheidungsdashboard",
+  "uid": "d51a444e-1710-4ca3-8d70-fa874109dbdd",
+  "version": 705,
+  "weekStart": ""
+}
