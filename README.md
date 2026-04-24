@@ -1,122 +1,152 @@
 # Entscheidungs-Dashboard
-Dieses Dashboard gibt vorausschauende Handlungsempfehlungen für den Betrieb einer Wärmepumpe auf Basis von: 
-
-- Temperaturtrend <br>
-- PV-Prognose <br>
-- Betriebszustand der Heizungsanlage. <br>
-
-Es berücksichtigt ferner die Nutzbarkeit von Solarthermie.
+Ein datenbasiertes Entscheidungsunterstützungssystem zur optimierten Steuerung von Wärmepumpen auf Basis von Wetterprognosen, PV-Ertrag und Betriebsdaten.<br>
 
 <img width="582" height="780" alt="image" src="https://github.com/user-attachments/assets/dd1bec68-48f9-4458-85aa-330077538c63" /> <br>
 <br>
 Das Entscheidungs-Dashboard ergänzt mein Alternatives Dashboard. <br> 
 (vgl. https://github.com/hrsnsvh2pd-png/Alternatives-Dashboard  ) <br>
 <br>
+Das Dashboard kombiniert
+- stündliche Wetterprognosen (Open-Meteo)
+- Wärmepumpen-Betriebsdaten (via lokaler Datenbank)
+- Visualisierung in Grafana OSS
+- einfache, transparente Entscheidungslogik
+
+### Kernidee
+
+Algorithmus schlägt vor – Nutzer entscheidet.<br>
+
+Statt komplexer Automatisierung liefert das System klare Handlungsempfehlungen für die nächsten 48 Stunden: <br>
+
+- Heizen verschieben
+- PV nutzen
+- Heizen vorziehen
+- keine Veränderung
+
+### Ziel
+
+ - bessere Nutzung von PV-Ertrag
+ - Reduktion ineffizienter Heizphasen
+ - transparente Entscheidungsgrundlage
+ - keine Blackbox-Automation
+
+### Projekt enthält
+
+ - Grafana Dashboard (JSON)
+ - SQLite Datenbankstruktur
+ - Importskripte (Wetter + Betriebsdaten)
+ - Installationsanleitung
+
+
 
 ## 1. Vorbemerkung
 „Für das Vergangene gibt der Kaufmann nichts.“ - Eugen Schmalenbach, Die Werte von Anlagen und Unternehmungen in der Schätztechnik, Zeitschrift für handelswirtschaftliche Fragen (ZfhF) 1917/1918, S. 1 ff.
 
-Dieser Satz bringt Dilemma und Grenzen der betriebswirtschaftlichen Forschung gleichermaßen auf den Punkt. Denn nur die Zukunft lässt sich gestalten. Dies gilt allerdings auch für sicherlich sehr viele der existierenden Dashboards zur Wärmepumpenanalyse und -steuerung, die regelmäßig alle gleichermaßen daran kranken, dass sie bestenfalls die aktuellen Zustände darstellen. Um eine Wärmepumpe jedoch optimal zu steuern, bedarf es allerdings einer vorausschauenden Berücksichtigung von Live-Wetterdaten, da Umgebungstemperatur und Sonnenstrahlung technisch bedingt die maßgeblichen Parameter für die technische und ökonomische Effizienz aller Wärmepumpen sind. Anbieter wie NIBE oder Stiebel-Eltron haben dies nach eigenen Aussagen bereits erkannt und lassen diesbezügliche Prognosewerte angabegemäß in ihre Wärmepumpensteuerung einfließen. Die Viessmanns-VICare-App berücksichtigt derzeit noch m.W. keine Wetterprognose-Daten.<br>
-<br>
-Diese Lücke zu schließen, war meine Motivation für die Entwicklung des Entscheidungs-Dashboards. Es stellt bewusst eine robuste, minimalistische Optimierungsregel dar, mit der ca. 80 - 90% des möglichen Effizienzpotenzials realsiert werden können - die Handlunhsenpfehlungen lasssen sich alle problemlos in der Praxis mit Hilfe der VICare-App oder am Anlagen-Display umsetzen. Das Dashboard  <br>
-<br>
-- basiert auf stündlich abgerufene Wetterdaten von Meteo-Open (https://open-meteo.com/);
-- umfasst einen Prognosezeitraum von 48 Stunden;
-- bietet einen auf Temperaturtrend- und PV-Leistung basierenden Algorythmus, der 4  alternative Aktionen *vorschlägt*: <br>
-    - Heizen verschieben,
-    - PV nutzen,
-    - Heizen vorziehen,
-    - keine Änderungen;
-- gibt ergänzende Inforationen, auf deren Grundlage der Nutzer *entscheiden kann* , was wirklich machbar und sinnvoll ist bzw. wieviel Spielraum tatsächlich besteht;
-- berücksichtigt den Einfluss von Salorthermie; <br>
+Die effiziente Steuerung einer Wärmepumpe ist in der Praxis oft überraschend reaktiv: Entscheidungen basieren meist auf aktuellen Temperaturen oder Bauchgefühl – obwohl eigentlich eine vorausschauende Betrachtung von Wetter, PV-Ertrag und Gebäudeverhalten notwendig wäre.
+
+Genau hier setzt dieses Projekt an.<br>
+<rb>
+
+### Idee
+Das Entscheidungs-Dashboard ist ein bewusst einfach gehaltener, aber datengetriebener Entscheidungsassistent für Wärmepumpenbetrieb. <br>
+
+Statt eine komplexe KI-Steuerung zu versuchen, setzt es auf ein pragmatisches Prinzip:<br>
+
+Algorithmus schlägt vor – Nutzer entscheidet. <br>
+
+Ziel ist es, mit einem transparenten und nachvollziehbaren Ansatz einen großen Teil des praktischen Optimierungspotenzials nutzbar zu machen, ohne die Kontrolle aus der Hand zu geben.
 <br>
 
 Die verarbeiteten Daten stehen in einer separaten SQLite-Datenbank (entscheidungs_dashboard.db), die ergänzend für die Beurteilung der vorgeschlagenen Aktion verwendeten Verschleiß- und Betriebsdaten werden synchron (stündlich) aus der viessmann_events.db (vieventlog) gelesen.<br>
+
+
+
+### Funktionsweise
+<br>
+<img width="1013" height="807" alt="image" src="https://github.com/user-attachments/assets/1acc07ef-7d90-4513-b512-f599b4323eab" />
+<br>
+Das Dashboard verarbeitet stündlich aktualisierte Wetterprognosedaten (Open-Meteo) und kombiniert diese mit Betriebsdaten der Wärmepumpe.>br
+
+Auf dieser Basis werden für einen Zeitraum von 48 Stunden vier klare Handlungsempfehlungen abgeleitet:
+
+ - Heizen verschieben
+ - PV-Energie nutzen
+ - Heizen vorziehen
+ - Keine Änderung
+<br>
+Soweit die Grenzen für eine Solarthermie-Nutzung (Sonneneinstrahlung, Pufferspeichertemperatur) erreicht werden, wird die aktive Handlungsempfehlung durch "Solarthermie" overruled. <br>
+<br>
+Zusätzlich werden unterstützende Informationen bereitgestellt, z. B.:
+
+ - Komfortzeitfenster (wann Heizen sinnvoll ist)
+ - Zeit bis zum nächsten PV-Nutzungsfenster
+ - Temperaturtrend-Entwicklung
+ - Einfluss solarthermischer Komponenten
+ - relevante Betriebsdaten der Wärmepumpe
+ - Sonnenseinstrahlung (für Solarthermienutzbarkeit)
+<br>
+Damit entsteht kein Automatismus, sondern eine Entscheidungsunterstützung mit Kontext. <br>
+
+### Entscheidungsprinzip
+Das System folgt einer bewusst einfachen, robusten Regelstruktur:
+
+ - 2-stufiger Entscheidungsprozess
+ - Algorithmische Empfehlung
+ - Nutzerbasierte finale Entscheidung
+
+Damit bleibt die Kontrolle immer beim Betreiber – bei gleichzeitig deutlich besserer Informationsbasis.
+Datenbasis <br>
+
+Das Dashboard basiert auf:
+
+ - Wetterprognosen von Open-Meteo (stündlich aktualisiert)
+ - lokalen Betriebsdaten der Wärmepumpe
+ - einer SQLite-Datenbank zur lokalen Verarbeitung
+ - Visualisierung über Grafana OSS
+<br>
+Die Datenverarbeitung ist so aufgebaut, dass unnötige API-Calls an die Viessmann Cloud vermieden werden.<br>
+
+### Integration Viessmann / vieventlog
+Für die Wärmepumpendaten wird optional das Open-Source-Projekt
+vieventlog verwendet. <br>
+
+Ein besonderer Dank gilt dem Entwickler für die Bereitstellung dieses Projekts für die Community.<br>
+
+Alternativ wäre auch ein direkter Zugriff über die Viessmann Cloud API möglich – dieser Weg ist hier jedoch nicht implementiert.<br>
+
+### Projekt
+Das Projekt ist hier veröffentlicht:<br>
+
+  https://github.com/hrsnsvh2pd-png/Entscheidungs-Dashboard
 <br>
 
-## 2. Rechtliche Hinweise
-Dieses Repository enthält ein Grafana-Dashboard als Classic-JSON-Datei sowie eine SQLite-Datenbank. Das Dashboard kann direkt in eine eigene Grafana-Instanz importiert werden. Die SQLite-Datenbank kann direkt auf die Festplatte kopiert werden.
+Enthalten sind:
+ - Grafana Dashboard (JSON)
+ - leere SQLite-Datenbank (mit Minimalstruktur)
+ - Skripte für Datenimport (Wetter & Betriebsdaten)
+ - ausführliche Installationsbeschreibung <br>
 
-Das Dashboard basiert auf Grafana OSS, einem Produkt von Grafana Labs, lizenziert unter der GNU Affero General Public License v3.0 (AGPLv3).
+### Lizenz
+Alle Inhalte stehen unter der<br>
+Creative Commons Attribution 4.0 International (CC BY 4.0) <br>
+https://creativecommons.org/licenses/by/4.0/legalcode <br>
 
-Der vollständige Quellcode von Grafana ist verfügbar unter: https://github.com/grafana/grafana
+### Ziel des Projekts
+Dieses Dashboard ist ein praktischer Versuch, die Lücke zwischen:
+ - theoretisch optimaler Wärmepumpensteuerung <br>
+und
+ - realer, nutzergetriebener Bedienung
 
-Die Lizenzbedingungen sind einsehbar unter: https://www.gnu.org/licenses/agpl-3.0.txt
+zu verkleinern. <br>
 
-Dieses Dashboard nutzt Grafana unverändert, sodass eine private Nutzung ohne Offenlegungspflichten möglich ist. Jeder Benutzer muss eine eigene Grafana-Instanz herunterladen und installieren.
+Es ersetzt keine vollautomatische Optimierung – aber es macht Entscheidungen deutlich besser begründet und nachvollziehbarer. <br>
 
-Das für die Anbindung der viessmann_events-Datenbank erforderliche SQLite-Plugin ist Bestandteil der Grafana-Standard-Distribution und verursacht keine zusätzlichen Lizenzanforderungen.
+### Feedback willkommen
 
-SQLite ist eine Public Domain. Die Lizenzbedingungen sind einsehbar unter: https://sqlite.org/copyright.html
+Ich freue mich über Rückmeldungen, Kritik und Ideen aus der Community – insbesondere zu Erweiterungen, Optimierungslogik und praktischen Erfahrungen im Betrieb.
 
-vieventlog Das Dashboard greift auf die Datei viessmann_events.db zu, die durch die Software vieventlog erzeugt und fortgeschrieben wird.
 
-vieventlog ist ein Open-Source-Projekt von Matthias Schneider. Ein besonderer Dank gilt ihm für die Entwicklung und Bereitstellung dieses Projekts für die Community.
-
-Der vollständige Quellcode ist verfügbar unter: https://github.com/mschneider82/vieventlog/releases
-
-vieventlog ist unter der MIT-Lizenz lizenziert. Lizenzbedingungen: https://mit-license.org
-
-Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-Dateien, Datenbank-Dateien und Skript-Dateien stehen unter der Creative Commons Attribution 4.0 International (CC BY 4.0).
-
-Die Lizenzbedingungen können hier abgerufen werden: https://creativecommons.org/licenses/by/4.0/legalcode
-
-Dieses Dashboard ist ein eigenständiges Community-Projekt und steht in keiner offiziellen Verbindung zu vieventlog oder dessen Autor.br>
-<br>
-
-Die vollständigen Lizenz- und rechtlichen Rahmenbedingungen, unter denen die in diesem Repository enthaltene Grafana-Dashboard-JSON-Dateien veröffentlich wird, stehen in den Dateien LEGAL.md und LICENSE.md in diesem Repository.<br>
-<br>
-## 3. Überblick
-Nachstehend ein Überblick über die Inhalte des Entscheidungs-Dashboards <br>
-<br>
-<img width="1022" height="802" alt="image" src="https://github.com/user-attachments/assets/1b02b11e-8171-440b-9d67-db49d8ec79b9" />
-<br>
-
-## 4. Konzeptioneller Ansatz
-Eine Wärmepumpe ist eine im Vergleich zu fossilen Brenwertgeräten vergleichsweise träge Heizquelle. Ihre (technische und ökonomische) Effizienz im Einsatz wird maßgeblich durch Umgebungstemperatur und angeforderte Wärmeleistung beeinflusst. Der Verschleiß (und damit die Lebensdauer) einer Wärmepumpe werden wiederum maßgeblich durch Laufzeit sowie Anzahl und zeitliche Abfolge der Kompressorstarts beeinflusst. Die Effizienz wird zusätzlich beeinflusst durch die Nutzung von Photovoltaik (Strompreis) sowie von Solarthermie (Stromverbrauch, Laufzeit, Kompressorstarts). <br>
-<br>
-Konzeptionell verfolgt das Dashboard einen physikalisch-herarchischen Ansatz: <br>
-1. Entscheidungs-*Vorschlag* auf Basis eines festen Algorithmus <br>
-   - Gebäudephysik (Trägheit bei Aufheizung) --> Temperaturtrend <br>
-   - Nutzbarkeit von Photovoltaik --> nächstes PV-Fenster mit (einmaligem) Mindest-PV-Peak <br>
-
-2. tatsächliche *Entscheidung* durch den Nutzer auf Basis ergänzender Informationen (Machbarkeit, bestehender Spielraum <br>
-   - Komfortzeit (max. akzeptable Zeit für Abkühlung ohne Heizung)
-   - Anlagenzustand (Vermeidung unnützer bzw. zusätzlicher Kompressourstarts, Berücksichtigung der Anlagen-Laufzeit <br>
-   - Komfort (Warmwasser-Temperatur) <br>
-3. Solarthermie <br>
-Solarthermie verläuft weitestgehend komplementär zur PV-Leistung. Individuell ist sie ohne Sensoren nur sehr schwer zu prognostizieren, da ihre Wirkung u.a. neben der solareren Einstrahlung abhängig ist von Kollektortyp, Kollektortemperatur, Anlagen-Gesamtwirkungsgrad, Dachausrichtung, Dachneigung, Rohr-/Speicherverluste, Startverluste). Zudem ist ihr Einfluss vom Systemzustand (tatsächliche Pufferspeicher-Temperatur) abhängig, der faktisch nicht prognostizierbar ist. <br>
-<br>
-Konzeptionell erfolgt die Berücksichtigung Solarthermie-Nutzbarkeit deshalb als Hinweis in Form eines "Overrulings" des ansonsten aktiven Aktions-Vorschlags bei geeigneten Rahmenbdingungen (Pufferspeicher-Temperaturgrenzen, Stärke der Einstrahlung). <br>
-<br>
-Da die meisten Wärmepumpen in Verbindung mit Photovoltaik-Anlagen beschrieben werden, wird dieser Aktionsvorschlag in jedem Fall berücksichtigt. Der HInweis auf Solarthermie kann durch einfachen Eintrag in der Datenbank-Steuertabelle unterdrückt werden. (meta_config: Wert für min_solar_buffer_threshold auf 99 setzen). Das Panel für Pufferspeicher-Temperatur, word bei fehlenden Werten nicht angezeigt.<br>
-<br>
-<br>
-Die ausführliche Beschreibung des konzeptionellen Ansatzes sowie die Beschrebung der AKtionsvorschlags-Ermittlung kann dem beiigenden Dokument "Enscheidungs-Dashoard.pdf" entnommen werden.<br>
-<br>
-
-## 5. Datenbank-Struktur
-Das Dashboard verfügt über eine eigende SQLite-Datenbank mit mehreren Tabellen und Views, die als fertige Datenbank mit ausgeliefert wird (vgl. anhängende Datei...).Die Datenbank ist leer, lediglich die Steuertabelle (meta_config) enthält Einträge, damit die Datenbank unverzüglich genuzt werden kann. <br>
-<br
-Struktur und SQL-Statements zu ihrer Erzeugung (falls gewünscht oder notwendig) können dem beiligenden Dokument Entscheidung-Dashboard-pdf entnommenwerden. <br>
-<br>
-
-## 6. Befüllen der Datenbank
-Das Dashboard basiert auf 2 Datenquellen, die stündlich (oder je nach Bedarf auch häufiger/seltener) befüllt werden:<br>
-- 48-Stunden-Wettervorhersage von Open Meteo (https://open-meteo.com/) zur ABleitung des Aktionsvorschlags <br>
-  Diese Wettervorhersage ist m.W. kostenlos (Begrenzung der kostenlosten API-Calls ist bei stündlichem Update unkritisch). Einzutragen sind im Download-Skript lediglich die Geodaten der zum Wärmepumpenstandort nächstgelegenen Wetterstation (zu finden unter https://open-meteo.com/en/docs?bounding_box=-90,-180,90,180)<br<
-  Das Skript (Code), die genaue Bechreibung der Eintragung sowie die Einstellung des automatisch stündlich Skriptablaufs (CRON-Job) sind in der beiligenden Datei Entscheidungs-Dashboard ebshcrieben. <rb>
-- Betriebsdaten der Wärmepumpe (für die ergänzenden Informationen ur tatsächlichen Entscheidungsfindung) <br>
-  Hier greift das Dashboard auf die vonder Anwendung vieventlog erzeugten und regelmäßig fortgeschriebenen SQLite-Datenbank viessmann_events.db zurück. **Dies bedeutet, dass die vieventlog-Anwendung notwendig installiert werden und 7 x 24 laufen muss, damit die aktuellen Betriebsdaten zr Verfügung stehen.** <br>
-Dies klingt auf den ersten Blick viellecht abschreckend, aber ohne kontinierliche Daten-Aktualisierung macht ein Dashboard eigentlich grundsätzlich keinen Sinn.<br>
-<br>
-Die Daten können alternativ auch ohne vieventlog per API-Call aus der Viessmann-Cloud heruntergeladen werden (aus der viessmann_event.db wird lediglich die Tabelle temperature_snapshot sowie die view temperature_snapshot_stat benötigt. Dieser Weg wird hier aber bewusst nicht empfohlen, da das Entscheidungs-Dashboard eigentlich nur optimal in Zusammenhang mit einem Dashboard für die Wärmepumpe betrieben werden kann: <br>
-- mein Alternatives Dashboard (https://github.com/hrsnsvh2pd-png/Alternatives-Dashboard)
-  oder
-- das in vieventlog enthaltene Dashboard (https://github.com/mschneider82/vieventlog) <br>
-<br>
-
-## 7. Installation
+## 2. Installation
 Die Installation des Entscheidungs-Dashboards läuft wie folgt ab: <br>
 1. Auslieferung
    Die Auslieferung umfasst
@@ -144,11 +174,11 @@ Die Installation des Entscheidungs-Dashboards läuft wie folgt ab: <br>
    Sonst wird der Prognosezeitraum im Dashboaerd nicht ordentlich angezeigt.
 <br>
 
-## Lizenz- und Haftungsbestimmungen
+## 3. Lizenz- und Haftungsbestimmungen
 Deutschsprachige Version: <br>
 <br>
 
-7.1 Nutzung von Grafana
+3.1 Nutzung von Grafana
 
 Dieses Dashboard wurde für die Nutzung mit Grafana OSS entwickelt, einem Produkt der Grafana Labs.
 
@@ -166,7 +196,7 @@ Jeder Nutzer ist verpflichtet, eine eigene Grafana-Installation bereitzustellen.
 
 Eine Verpflichtung zur Offenlegung eigener Anpassungen entsteht nur im Rahmen der AGPL-Bestimmungen und betrifft ausschließlich Modifikationen an der AGPL-lizenzierten Software selbst.
 
-7.2 Abhängigkeit von vieventlog
+3.2 Abhängigkeit von vieventlog
 
 Zur Nuzung des Dashboards muss auf Daten aus der Datei viessmann_events.db zugegriffen werden, die durch die Software
 vieventlog erzeugt und fortgeschrieben wird.
@@ -183,7 +213,7 @@ https://mit-license.org
 
 Dieses Projekt ist unabhängig von vieventlog und steht in keiner geschäftlichen oder organisatorischen Verbindung zu dessen Autor.
 
-7.3 Lizenz dieses Repositories
+3.3 Lizenz dieses Repositories
 
 Die in diesem Repository enthaltenen Grafana-Dashboard-JSON-, Datenbank- und Skript-Dateien (zusammen: Repository-Dateien) stehen unter der Creative Commons Attribution 4.0 International (CC BY 4.0).
 
@@ -200,7 +230,7 @@ Namensnennung des Urhebers ist erforderlich.
 
 © 2026 Hans-Hermann Gröger
 
-7.4 Haftungsausschluss
+3.4 Haftungsausschluss
 
 Die Bereitstellung der Repository-Dateien erfolgt unentgeltlich.
 
@@ -214,11 +244,11 @@ Der Nutzer ist selbst verantwortlich für:
 - Datensicherung
 - Systemsicherheit
 
-7.5 Kein Support
+3.5 Kein Support
 
 Ein Anspruch auf Support, Wartung oder Weiterentwicklung besteht nicht.
 
-7.6 Keine Verbindung zu Grafana Labs
+3.6 Keine Verbindung zu Grafana Labs
 
 Dieses Projekt steht in keiner Verbindung zu Grafana Labs und wird von diesem Unternehmen weder unterstützt noch zertifiziert.
 
