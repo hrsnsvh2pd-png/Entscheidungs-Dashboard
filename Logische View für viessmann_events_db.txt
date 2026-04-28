@@ -1,0 +1,15 @@
+CREATE VIEW IF NOT EXISTS 'temperature_snapshots_stat' as
+SELECT datetime(substr(timestamp, 1, 19), 'localtime')
+as 'timestamp_mez',
+thermal_power * 1000 / 60 * sample_interval
+as 'Wärmeleistung',
+compressor_power / 60 * sample_interval
+as 'elektrische_Leistung',
+thermal_power * 1000 / compressor_power
+as 'COP_calc',
+time('00:00', '+' || (compressor_active * sample_interval) || ' minutes')
+as 'Laufzeit',
+*
+FROM temperature_snapshots
+ORDER BY installation_id desc,
+datetime(substr(timestamp, 1, 19), 'localtime' ) desc
