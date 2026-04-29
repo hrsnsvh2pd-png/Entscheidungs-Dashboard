@@ -173,7 +173,7 @@ Dieses Repository enthält:
 - leere SQLite Datenbank (Minimalstruktur)
 - Skripte für Datenimport (Wetter & Betriebsdaten)
 - ausführliche Installationsbeschreibung
-- txt-Dateien mit SQL-Statements zum Generieren der fehlenden view in viessmann_events.db
+- txt-Dateien mit SQL-Statements zum Generieren der fehlenden views in viessmann_events.db
 
 ---
 
