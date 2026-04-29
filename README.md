@@ -62,7 +62,7 @@ Statt komplexer Automatisierung liefert das System **klare Handlungsempfehlungen
 - SQLite Datenbankstruktur
 - Importskripte (Wetter + Betriebsdaten)
 - Installationsanleitung
-- txt-Dateien mit SQL-Statements zum Anlegen der fehlenden view in viessmann_events.db
+- 2 txt-Dateien mit SQL-Statements zum Anlegen der fehlenden view in viessmann_events.db
 
 ---
 
@@ -173,7 +173,7 @@ Dieses Repository enthält:
 - leere SQLite Datenbank (Minimalstruktur)
 - Skripte für Datenimport (Wetter & Betriebsdaten)
 - ausführliche Installationsbeschreibung
-- txt-Dateien mit SQL-Statements zum Generieren der fehlenden views in viessmann_events.db
+- 2 txt-Dateien mit SQL-Statements zum Generieren der fehlenden views in viessmann_events.db
 
 ---
 
@@ -220,9 +220,10 @@ Ich freue mich über Rückmeldungen, Kritik und Ideen aus der Community – insb
 2. Grafana installieren  
 3. Dashboard JSON importieren  
 4. SQLite Datenbank konfigurieren
-5. Fehlende Views in der viessmann_events.db generieren (2 views). 
-6. Import-Skripte anpassen  
-7. CRON Jobs einrichten  
+5. Fehlende View 'temperature_snapshots_stat' in der viessmann_events.db generieren (Datei "Logische View für viessmann_events_db.txt")
+6. Fehlende View 'temperature_snapshots_takte' in der viessmann_events.db generieren (Datei "Logische View für viesmann_events_db (2).txt")
+7. Import-Skripte anpassen  
+8. CRON Jobs einrichten  
 
 Eine ausführliche Installationsbeschreibung befindet sich in der Datei:
 
