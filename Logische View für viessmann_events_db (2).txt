@@ -1,4 +1,4 @@
-Create View 'temperature_snapshots_takte' as SELECT
+CREATE VIEW IF NOT EXISTS 'temperature_snapshots_takte' as SELECT
  
 datetime (
   substr(timestamp, 1, 19),
