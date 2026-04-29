@@ -1,0 +1,10 @@
+CREATE VIEW IF NOT EXISTS
+'temperature_snapshots_takte_heute'
+as SELECT datetime ( substr(timestamp, 1, 19), 'localtime')
+as timestamp_mez,
+installation_id,
+Compressor_active,
+LAG ( compressor_active) over(order by installation_id desc, datetime ( substr(timestamp, 1, 19), 'localtime') desc)
+as next_period,
+LAG ( compressor_active) over(order by installation_id desc,
+datetime ( substr(timestamp, 1, 19), 'localtime') desc )
