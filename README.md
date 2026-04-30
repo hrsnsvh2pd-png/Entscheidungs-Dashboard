@@ -219,11 +219,12 @@ Ich freue mich über Rückmeldungen, Kritik und Ideen aus der Community – insb
 1. Dateien aus dem Repository herunterladen  
 2. Grafana installieren  
 3. Dashboard JSON importieren  
-4. SQLite Datenbank konfigurieren
-5. Fehlende View 'temperature_snapshots_stat' in der viessmann_events.db generieren (Datei "Logische View für viessmann_events_db.txt")
-6. Fehlende View 'temperature_snapshots_takte' in der viessmann_events.db generieren (Datei "Logische View für viesmann_events_db (2).txt")
-7. Import-Skripte anpassen  
-8. CRON Jobs einrichten  
+4. SQLite Datenbank laden (Datei entscheidungs_dashboard_Auslieferung.db)
+5. Eigene installation_id in die Tabelle meta_config einstellen
+6. Fehlende View 'temperature_snapshots_stat' in der viessmann_events.db generieren (Datei "Logische View für viessmann_events_db.txt")
+7. Fehlende View 'temperature_snapshots_takte' in der viessmann_events.db generieren (Datei "Logische View für viesmann_events_db (2).txt")
+8. Import-Skripte anpassen  
+9. CRON Jobs einrichten  
 
 Eine ausführliche Installationsbeschreibung befindet sich in der Datei:
 
